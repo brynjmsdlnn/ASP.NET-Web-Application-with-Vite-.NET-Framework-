@@ -1,7 +1,7 @@
 # ASP.NET Web Application with Vite (.NET Framework)
 
-ASP.NET MVC/Web API project built on **.NET Framework 4.8.1** with **Vite** for frontend bundling.
-This template keeps the classic ASP.NET project structure while using modern frontend tooling for JS/CSS builds.
+ASP.NET MVC/Web API project built on **.NET Framework 4.8.1** with **Vite** and **Tailwind CSS 4.2** for frontend bundling.
+This template keeps the classic ASP.NET project structure while using modern utility-first frontend tooling for JS/CSS builds.
 
 ## Tech Stack
 
@@ -9,7 +9,7 @@ This template keeps the classic ASP.NET project structure while using modern fro
 - ASP.NET MVC 5 + ASP.NET Web API 5
 - Vite (frontend bundler)
 - NuGet (`packages.config`) + Node package manager (NPM)
-- JavaScript: Bootstrap 5.2.3
+- CSS: Tailwind CSS 4.2
 
 ## Repository Structure
 
@@ -19,7 +19,7 @@ This template keeps the classic ASP.NET project structure while using modern fro
 - `Helpers/` - Helper classes
 - `Middleware/` - Vite helper middleware
 - `Scripts/app.js` - JavaScript entry source
-- `Styles/app.css` - CSS entry source
+- `Styles/app.css` - Tailwind + custom CSS entry source
 - `Views/` - Razor views
 - `Web.config` - ASP.NET application configuration
 - `vite.config.mjs` - Vite build/dev configuration

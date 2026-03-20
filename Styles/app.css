@@ -1,18 +1,2 @@
-﻿@import 'bootstrap/dist/css/bootstrap.css';
-
-/* Your custom styles below */
-.body-content {
-    margin-top: 15px;
-    padding-left: 15px;
-    padding-right: 15px;
-}
-
-.dl-horizontal dt {
-    white-space: normal;
-}
-
-input,
-select,
-textarea {
-    max-width: 280px;
-}
+@import 'tailwindcss';
+/* Template-specific custom styles can be added below. */

@@ -1,1 +1,1 @@
-﻿import 'bootstrap/dist/js/bootstrap.bundle.js';
+// Vite frontend entrypoint. Add interactive JS here if required.
