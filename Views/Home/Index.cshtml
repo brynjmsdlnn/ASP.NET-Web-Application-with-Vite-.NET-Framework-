@@ -1,41 +1,49 @@
 @{
-    ViewBag.Title = "Home Page";
+    ViewBag.Title = "Template Home";
 }
 
-<main class="space-y-10">
-    <section class="space-y-3" aria-labelledby="aspnetTitle">
-        <h1 id="title" class="text-4xl font-bold text-slate-900">ASP.NET</h1>
-        <p class="text-lg text-slate-700">ASP.NET is a free web framework for building great Web sites and Web applications using HTML, CSS and JavaScript.</p>
-        <p>
-            <a href="https://asp.net" class="inline-block rounded-md bg-blue-600 px-4 py-2 text-sm font-semibold text-white transition hover:bg-blue-500">Learn more &raquo;</a>
+<main class="space-y-8">
+    <section class="space-y-4" aria-labelledby="templateTitle">
+        <h1 id="templateTitle" class="text-3xl font-bold text-slate-900 dark:text-slate-100">Welcome to the ASP.NET + Vite Template</h1>
+        <p class="text-lg leading-relaxed text-slate-700 dark:text-slate-300">
+            This is a starter template for building classic ASP.NET MVC/Web API applications on <strong>.NET Framework 4.8.1</strong> while using modern frontend tooling.
+            It includes <strong>Vite 8.0.1</strong> for asset bundling and <strong>Tailwind CSS 4.2</strong> for styling.
         </p>
+        <p class="text-sm text-slate-600 dark:text-slate-400">You can use this project as a base for internal admin tools, enterprise portals, or any MVC-based .NET Framework app.</p>
     </section>
 
-    <div class="grid gap-4 md:grid-cols-3">
-        <section class="rounded-xl border border-slate-200 bg-white p-5 shadow-sm" aria-labelledby="gettingStartedTitle">
-            <h2 id="gettingStartedTitle" class="mb-2 text-xl font-semibold text-slate-900">Getting started</h2>
-            <p>
-                ASP.NET MVC gives you a powerful, patterns-based way to build dynamic websites that
-                enables a clean separation of concerns and gives you full control over markup
-                for enjoyable, agile development.
+    <section class="grid gap-4 md:grid-cols-3">
+        <article class="rounded-xl border border-slate-200 bg-white p-5 shadow-sm dark:border-slate-700 dark:bg-slate-900">
+            <h2 class="mb-2 text-xl font-semibold text-slate-900 dark:text-slate-100">What this includes</h2>
+            <ul class="list-inside list-disc space-y-1 text-sm text-slate-700 dark:text-slate-300">
+                <li>.NET Framework 4.8.1 MVC + Web API project structure</li>
+                <li>Vite integration via <code>@Html.Raw("@Html.Vite(...)")</code></li>
+                <li>Tailwind CSS pipeline and utility-first styling</li>
+                <li>Build output folder: <code>wwwroot/dist</code></li>
+            </ul>
+        </article>
+
+        <article class="rounded-xl border border-slate-200 bg-white p-5 shadow-sm dark:border-slate-700 dark:bg-slate-900">
+            <h2 class="mb-2 text-xl font-semibold text-slate-900 dark:text-slate-100">Quick start</h2>
+            <ol class="list-inside list-decimal space-y-1 text-sm text-slate-700 dark:text-slate-300">
+                <li>Run <code>npm install</code></li>
+                <li>Run <code>npm run build</code></li>
+                <li>Press F5 in Visual Studio</li>
+            </ol>
+        </article>
+
+        <article class="rounded-xl border border-slate-200 bg-white p-5 shadow-sm dark:border-slate-700 dark:bg-slate-900">
+            <h2 class="mb-2 text-xl font-semibold text-slate-900 dark:text-slate-100">Great template candidates</h2>
+            <p class="text-sm text-slate-700 dark:text-slate-300">
+                This starter is ideal when you want ASP.NET stability and modern frontend performance together, especially for existing teams moving legacy MVC apps toward current tooling.
             </p>
-            <p>
-                <a class="inline-flex items-center justify-center rounded-md border border-slate-300 px-4 py-2 text-sm font-medium text-slate-900 transition hover:bg-slate-100" href="https://go.microsoft.com/fwlink/?LinkId=301865">Learn more &raquo;</a>
-            </p>
-        </section>
-        <section class="rounded-xl border border-slate-200 bg-white p-5 shadow-sm" aria-labelledby="librariesTitle">
-            <h2 id="librariesTitle" class="mb-2 text-xl font-semibold text-slate-900">Get more libraries</h2>
-            <p>NuGet is a free Visual Studio extension that makes it easy to add, remove, and update libraries and tools in Visual Studio projects.</p>
-            <p>
-                <a class="inline-flex items-center justify-center rounded-md border border-slate-300 px-4 py-2 text-sm font-medium text-slate-900 transition hover:bg-slate-100" href="https://go.microsoft.com/fwlink/?LinkId=301866">Learn more &raquo;</a>
-            </p>
-        </section>
-        <section class="rounded-xl border border-slate-200 bg-white p-5 shadow-sm" aria-labelledby="hostingTitle">
-            <h2 id="hostingTitle" class="mb-2 text-xl font-semibold text-slate-900">Web Hosting</h2>
-            <p>You can easily find a web hosting company that offers the right mix of features and price for your applications.</p>
-            <p>
-                <a class="inline-flex items-center justify-center rounded-md border border-slate-300 px-4 py-2 text-sm font-medium text-slate-900 transition hover:bg-slate-100" href="https://go.microsoft.com/fwlink/?LinkId=301867">Learn more &raquo;</a>
-            </p>
-        </section>
-    </div>
+        </article>
+    </section>
+
+    <section class="rounded-xl border border-blue-200 bg-blue-50 p-4 dark:border-blue-900 dark:bg-blue-950">
+        <p class="text-sm text-blue-900 dark:text-blue-200">
+            To customize this landing page, edit <code>Views/Home/Index.cshtml</code>.
+            To customize styles, update <code>Styles/app.css</code> and keep your scripts in <code>Scripts/app.js</code>.
+        </p>
+    </section>
 </main>

@@ -12,5 +12,6 @@
     "@tailwindcss/vite": "^4.2.0",
     "tailwindcss": "^4.2.0",
     "vite": "^8.0.1"
-  }
+  },
+  "dependencies": {}
 }

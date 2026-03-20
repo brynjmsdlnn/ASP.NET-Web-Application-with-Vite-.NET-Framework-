@@ -87,8 +87,8 @@ npm run dev
 - `node_modules`, `bin`, `obj`, `.vs`, and `wwwroot/dist` are ignored in `.gitignore`
   to keep tracked files source-focused.
 - This project uses `packages.config` and classic ASP.NET project style.
+- Theme and mobile menu buttons use text/symbols, so no icon package is required.
 
 ## License
 
 This project is provided as-is for learning/template purposes.
-
