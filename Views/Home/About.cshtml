@@ -1,9 +1,36 @@
 @{
     ViewBag.Title = "About";
 }
-<main aria-labelledby="title" class="space-y-3">
-    <h2 id="title" class="text-3xl font-bold text-slate-900 dark:text-slate-100">@ViewBag.Title.</h2>
-    <h3 class="text-xl font-semibold text-slate-700 dark:text-slate-300">@ViewBag.Message</h3>
+<main aria-labelledby="title" class="space-y-8">
+    <section class="space-y-4" aria-labelledby="aboutTitle">
+        <h2 id="aboutTitle" class="text-3xl font-bold text-slate-900 dark:text-slate-100">About this Template</h2>
+        <p class="text-lg leading-relaxed text-slate-700 dark:text-slate-300">
+            This starter kit combines <strong>ASP.NET MVC 5 + Web API 2</strong> with modern frontend tooling using
+            <strong>Vite</strong>, <strong>Tailwind CSS</strong>, and <strong>Lucide</strong> icons. It is designed to
+            give you a secure and scalable baseline with minimal boilerplate.
+        </p>
+        <p class="text-sm text-slate-600 dark:text-slate-400">
+            @ViewBag.Message
+        </p>
+    </section>
 
-    <p class="text-slate-600 dark:text-slate-400">Use this area to provide additional information.</p>
+    <section class="grid gap-4 md:grid-cols-2">
+        <article class="rounded-xl border border-slate-200 bg-white p-5 shadow-sm dark:border-slate-700 dark:bg-slate-900">
+            <h3 class="mb-2 text-xl font-semibold text-slate-900 dark:text-slate-100">Architecture highlights</h3>
+            <ul class="list-inside list-disc space-y-1 text-sm text-slate-700 dark:text-slate-300">
+                <li>ASP.NET MVC 5 + ASP.NET Web API 2 project structure.</li>
+                <li>Global action filter for per-request CSP nonce generation.</li>
+                <li>Asset loading via Vite dev server and production manifest.</li>
+            </ul>
+        </article>
+
+        <article class="rounded-xl border border-slate-200 bg-white p-5 shadow-sm dark:border-slate-700 dark:bg-slate-900">
+            <h3 class="mb-2 text-xl font-semibold text-slate-900 dark:text-slate-100">What to build next</h3>
+            <ul class="list-inside list-disc space-y-1 text-sm text-slate-700 dark:text-slate-300">
+                <li>Replace these placeholders with your actual product pages.</li>
+                <li>Connect controllers to real domain data and services.</li>
+                <li>Use partial views for reusable page sections in <code>Views/Shared</code>.</li>
+            </ul>
+        </article>
+    </section>
 </main>

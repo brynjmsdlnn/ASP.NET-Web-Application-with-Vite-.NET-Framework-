@@ -4,13 +4,23 @@
 
 <main class="space-y-8">
     <section class="space-y-4" aria-labelledby="templateTitle">
-        <h1 id="templateTitle" class="text-3xl font-bold text-slate-900 dark:text-slate-100">Welcome to the ASP.NET + Vite Template</h1>
+        <h1 id="templateTitle" class="text-3xl font-bold text-slate-900 dark:text-slate-100">Welcome to ASP.NET + Vite</h1>
         <p class="text-lg leading-relaxed text-slate-700 dark:text-slate-300">
-            This is a starter template for building classic ASP.NET MVC/Web API applications on <strong>.NET Framework 4.8.1</strong> while using modern frontend tooling.
-            It now includes a modularized frontend stack and a secure CSP flow using per-request nonces.
+            A starter template for building classic ASP.NET MVC/Web API applications on <strong>.NET Framework 4.8.1</strong> while using a modern frontend build pipeline.
+            Use this page as a launchpad for your own landing, admin, or enterprise dashboard workflow.
             Current stack includes <strong>Vite 8.0.1</strong>, <strong>Tailwind CSS 4.2</strong>, and <strong>Lucide</strong>.
         </p>
-        <p class="text-sm text-slate-600 dark:text-slate-400">You can use this project as a base for internal admin tools, enterprise portals, or any MVC-based .NET Framework app.</p>
+        <p class="text-sm text-slate-600 dark:text-slate-400">
+            Security-conscious defaults are enabled out of the box, with nonce-based CSP handling and centralized asset registration.
+        </p>
+        <div class="flex flex-wrap gap-3">
+            <a href="https://learn.microsoft.com/aspnet/mvc/overview" class="rounded-md border border-slate-300 px-4 py-2 text-sm font-medium text-slate-900 transition hover:bg-slate-50 dark:border-slate-700 dark:text-slate-100 dark:hover:bg-slate-800">
+                ASP.NET MVC Docs
+            </a>
+            <a href="@Url.Action("About", "Home")" class="rounded-md bg-slate-900 px-4 py-2 text-sm font-medium text-white transition hover:bg-slate-800 dark:bg-slate-100 dark:text-slate-900 dark:hover:bg-white">
+                View About Page
+            </a>
+        </div>
     </section>
 
     <section class="grid gap-4 md:grid-cols-3">
@@ -30,7 +40,9 @@
             <h2 class="mb-2 text-xl font-semibold text-slate-900 dark:text-slate-100">Quick start</h2>
             <ol class="list-inside list-decimal space-y-1 text-sm text-slate-700 dark:text-slate-300">
                 <li>Run <code>npm install</code></li>
-                <li>Run <code>npm run build</code></li>
+                <li>Run <code>npm run dev</code> for local development</li>
+                <li>Run <code>npm run build</code> for production assets</li>
+                <li>Update <code>Views/Home/Index.cshtml</code> to match your own content model</li>
                 <li>Press F5 in Visual Studio</li>
             </ol>
         </article>
@@ -42,6 +54,11 @@
                 <span class="font-medium">Scripts/layout/theme.js</span> for theme state logic and
                 <span class="font-medium">Scripts/layout/menu.js</span> for mobile menu behavior.
             </p>
+            <ul class="mt-3 list-inside list-disc space-y-1 text-sm text-slate-700 dark:text-slate-300">
+                <li>Replace placeholder sections with your own domain content.</li>
+                <li>Move reusable fragments into <code>Views/Shared</code> partials.</li>
+                <li>Hook API-backed data into the existing card layout.</li>
+            </ul>
         </article>
     </section>
 
@@ -53,4 +70,5 @@
             For CSP helpers, review <code>Filters/ContentSecurityPolicyFilter.cs</code> and <code>Helpers/NonceHelper.cs</code>.
         </p>
     </section>
+
 </main>
