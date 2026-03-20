@@ -1,0 +1,54 @@
+# ---------- ASP.NET / Visual Studio (.NET Framework) ----------
+bin/
+obj/
+Release/
+Debug/
+.vs/
+*.suo
+*.user
+*.userosscache
+*.sln.docstates
+*.csproj.user
+*.vbproj.user
+*.config.user
+*.DotSettings.user
+*.cache
+*.pidb
+*.ilk
+*.ipch
+*.log
+*.pdb
+*.ndf
+TestResult*/
+TestResults/
+*.publishsettings
+*.bak
+Generated\ Files/
+GeneratedFiles/
+App_Data/*.mdf
+App_Data/*.ldf
+App_Data/*.sdf
+
+# ---------- NuGet / Package Restore ----------
+packages/
+.nuget/
+
+# ---------- Web / Vite Frontend ----------
+node_modules/
+wwwroot/dist/
+dist/
+.build/
+.cache/
+.vite/
+wwwroot/.vite/
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+pnpm-debug.log*
+
+# ---------- IDE / Local Tooling ----------
+_ReSharper*
+*_ReSharper*
+*.userprefs
+.idea/
+.vscode/
