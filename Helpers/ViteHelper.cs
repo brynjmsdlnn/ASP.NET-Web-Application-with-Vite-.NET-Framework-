@@ -1,4 +1,4 @@
-﻿using ASP.NET_Web_Application_with_Vite__.NET_Framework_.Middleware;
+using ASP.NET_Web_Application_with_Vite__.NET_Framework_.Middleware;
 using System;
 using System.Collections.Generic;
 using System.Configuration;
@@ -34,7 +34,7 @@ namespace ASP.NET_Web_Application_with_Vite__.NET_Framework_.Helpers
         /// In production, tags are resolved from <c>manifest.json</c>.
         /// </summary>
         /// <example>
-        /// <code>@Html.Vite("Styles/app.css", "Scripts/main.js")</code>
+        /// <code>@Html.Vite("Styles/app.css", "Scripts/app.js")</code>
         /// </example>
         public static IHtmlString Vite(this HtmlHelper html, params string[] entries)
         {
