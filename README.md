@@ -80,16 +80,22 @@ npm run dev
 
 ### 5) Enable CSP security headers (already included)
 
-This project includes a global action filter that sets a `Content-Security-Policy` header:
+This project includes a global action filter that sets a nonce-based `Content-Security-Policy` header:
 
-- `Filters/ContentSecurityPolicyFilter.cs` (`OnResultExecuting`)
+- `Filters/ContentSecurityPolicyFilter.cs`
+  - Generates a random nonce in `OnActionExecuting`
+  - Stores it in `HttpContext.Items[NonceKey]`
+  - Uses the nonce in `OnResultExecuting` to emit `script-src` and `style-src`
 - Registered globally in `App_Start/FilterConfig.cs`
 - Applied via `Global.asax.cs` through `FilterConfig.RegisterGlobalFilters(GlobalFilters.Filters)`
+- `Helpers/NonceHelper.cs` exposes `@Html.CspNonce()` for Razor views
+
+`Views/Shared/_Layout.cshtml` now applies the nonce to the inline theme script.
 
 You can verify this by checking your browser response headers for:
 
 ```text
-Content-Security-Policy: default-src 'self'; ...
+Content-Security-Policy: default-src 'self'; script-src 'self' 'nonce-...'; style-src 'self' 'nonce-...'; ...
 ```
 
 ## Useful Scripts

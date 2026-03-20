@@ -137,6 +137,7 @@
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
+    <Compile Include="Helpers\NonceHelper.cs" />
     <Compile Include="Helpers\ViteHelper.cs" />
     <Compile Include="Middleware\ViteMiddleware.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
