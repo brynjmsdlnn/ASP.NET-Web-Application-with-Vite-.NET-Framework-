@@ -17,6 +17,7 @@ This template keeps the classic ASP.NET project structure while using modern uti
 - `ASP.NET Web Application with Vite (.NET Framework).csproj` - Main project file
 - `Controllers/` - MVC controllers
 - `App_Start/` - Route, Web API, and MVC configuration
+- `Filters/` - ASP.NET filters (CSP headers)
 - `Helpers/` - Helper classes
 - `Middleware/` - Vite helper middleware
 - `Scripts/app.js` - JavaScript entry source
@@ -75,6 +76,20 @@ You can run Vite dev server separately when needed:
 
 ```powershell
 npm run dev
+```
+
+### 5) Enable CSP security headers (already included)
+
+This project includes a global action filter that sets a `Content-Security-Policy` header:
+
+- `Filters/ContentSecurityPolicyFilter.cs` (`OnResultExecuting`)
+- Registered globally in `App_Start/FilterConfig.cs`
+- Applied via `Global.asax.cs` through `FilterConfig.RegisterGlobalFilters(GlobalFilters.Filters)`
+
+You can verify this by checking your browser response headers for:
+
+```text
+Content-Security-Policy: default-src 'self'; ...
 ```
 
 ## Useful Scripts
