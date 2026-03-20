@@ -1,28 +1,31 @@
+import { createIcons, Moon, Sun, Menu, X } from 'lucide';
+
+createIcons({
+    icons: {
+        Moon,
+        Sun,
+        Menu,
+        X
+    }
+});
+
 // ============================================================================
 // THEME MANAGER
 // ============================================================================
 const ThemeManager = {
     key: 'template-theme',
-    toggleBtn: null,
-    iconEl: null,
+    toggleBtn: document.getElementById('theme-toggle'),
     root: document.documentElement,
 
     init() {
-        this.toggleBtn = document.getElementById('theme-toggle');
-        this.iconEl = document.getElementById('theme-toggle-icon');
-        
-        // 1. Get initial state (which was already set by the inline script in <head>)
         const isCurrentlyDark = this.root.classList.contains('dark');
-        this.updateUI(isCurrentlyDark);
+        this.updateAria(isCurrentlyDark);
 
-        // 2. Listen for clicks on the toggle button
         if (this.toggleBtn) {
             this.toggleBtn.addEventListener('click', () => this.toggleUserPreference());
         }
 
-        // 3. Listen for OS-level theme changes (e.g., sunset automatic dark mode)
         window.matchMedia('(prefers-color-scheme: dark)').addEventListener('change', (e) => {
-            // Only auto-switch if the user hasn't explicitly saved a preference
             if (!localStorage.getItem(this.key)) {
                 this.applyTheme(e.matches);
             }
@@ -33,7 +36,6 @@ const ThemeManager = {
         const isDark = this.root.classList.contains('dark');
         const willBeDark = !isDark;
         
-        // Save their explicit choice
         localStorage.setItem(this.key, willBeDark ? 'dark' : 'light');
         this.applyTheme(willBeDark);
     },
@@ -44,19 +46,12 @@ const ThemeManager = {
         } else {
             this.root.classList.remove('dark');
         }
-        this.updateUI(isDark);
+        this.updateAria(isDark);
     },
 
-    updateUI(isDark) {
-        // Safely update the DOM elements if they exist
+    updateAria(isDark) {
         if (this.toggleBtn) {
             this.toggleBtn.setAttribute('aria-label', isDark ? 'Switch to light mode' : 'Switch to dark mode');
-        }
-        if (this.iconEl) {
-            requestAnimationFrame(() => {
-                this.iconEl.textContent = isDark ? '☀️' : '🌙';
-                this.iconEl.setAttribute('aria-hidden', 'true');
-            });
         }
     }
 };
@@ -65,17 +60,13 @@ const ThemeManager = {
 // MOBILE MENU MANAGER
 // ============================================================================
 const MenuManager = {
-    toggleBtn: null,
-    iconEl: null,
-    menuEl: null,
-    links: null,
+    toggleBtn: document.getElementById('mobile-menu-toggle'),
+    menuEl: document.getElementById('site-menu'),
+    links: document.querySelectorAll('#site-menu a'),
+    iconMenu: document.getElementById('icon-menu'),
+    iconClose: document.getElementById('icon-close'),
 
     init() {
-        this.toggleBtn = document.getElementById('mobile-menu-toggle');
-        this.iconEl = document.getElementById('menu-toggle-icon');
-        this.menuEl = document.getElementById('site-menu');
-        this.links = document.querySelectorAll('#site-menu a');
-        
         if (!this.toggleBtn || !this.menuEl) return;
 
         this.toggleBtn.addEventListener('click', () => {
@@ -84,7 +75,6 @@ const MenuManager = {
             this.updateUI(isOpen);
         });
 
-        // Close menu when a link is clicked on mobile
         this.links.forEach(link => {
             link.addEventListener('click', () => {
                 if (window.innerWidth < 768) {
@@ -98,12 +88,15 @@ const MenuManager = {
     updateUI(isOpen) {
         this.toggleBtn.setAttribute('aria-expanded', isOpen.toString());
         this.toggleBtn.setAttribute('aria-label', isOpen ? 'Close navigation' : 'Open navigation');
-        
-        if (this.iconEl) {
-            requestAnimationFrame(() => {
-                this.iconEl.textContent = isOpen ? '✕' : '☰';
-                this.iconEl.setAttribute('aria-hidden', 'true');
-            });
+
+        if (this.iconMenu && this.iconClose) {
+            if (isOpen) {
+                this.iconMenu.classList.add('hidden');
+                this.iconClose.classList.remove('hidden');
+            } else {
+                this.iconMenu.classList.remove('hidden');
+                this.iconClose.classList.add('hidden');
+            }
         }
     }
 };

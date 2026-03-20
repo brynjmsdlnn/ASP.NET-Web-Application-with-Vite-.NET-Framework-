@@ -30,7 +30,8 @@
                         type="button"
                         class="rounded-md border border-slate-400/40 p-2 text-slate-100 transition hover:bg-white/10"
                         aria-label="Toggle dark mode">
-                    <span id="theme-toggle-icon" aria-hidden="true">🌙</span>
+                    <i data-lucide="moon" class="block dark:hidden"></i>
+                    <i data-lucide="sun" class="hidden dark:block"></i>
                 </button>
                 <button id="mobile-menu-toggle"
                         type="button"
@@ -38,7 +39,8 @@
                         aria-controls="site-menu"
                         aria-expanded="false"
                         aria-label="Toggle navigation">
-                    <span id="menu-toggle-icon" aria-hidden="true">☰</span>
+                    <i id="icon-menu" data-lucide="menu" class="block"></i>
+                    <i id="icon-close" data-lucide="x" class="hidden"></i>
                 </button>
             </div>
 
