@@ -7,18 +7,21 @@
         <h1 id="templateTitle" class="text-3xl font-bold text-slate-900 dark:text-slate-100">Welcome to the ASP.NET + Vite Template</h1>
         <p class="text-lg leading-relaxed text-slate-700 dark:text-slate-300">
             This is a starter template for building classic ASP.NET MVC/Web API applications on <strong>.NET Framework 4.8.1</strong> while using modern frontend tooling.
-            It includes <strong>Vite 8.0.1</strong> for asset bundling and <strong>Tailwind CSS 4.2</strong> for styling.
+            It now includes a modularized frontend stack and a secure CSP flow using per-request nonces.
+            Current stack includes <strong>Vite 8.0.1</strong>, <strong>Tailwind CSS 4.2</strong>, and <strong>Lucide</strong>.
         </p>
         <p class="text-sm text-slate-600 dark:text-slate-400">You can use this project as a base for internal admin tools, enterprise portals, or any MVC-based .NET Framework app.</p>
     </section>
 
     <section class="grid gap-4 md:grid-cols-3">
         <article class="rounded-xl border border-slate-200 bg-white p-5 shadow-sm dark:border-slate-700 dark:bg-slate-900">
-            <h2 class="mb-2 text-xl font-semibold text-slate-900 dark:text-slate-100">What this includes</h2>
+            <h2 class="mb-2 text-xl font-semibold text-slate-900 dark:text-slate-100">New template features</h2>
             <ul class="list-inside list-disc space-y-1 text-sm text-slate-700 dark:text-slate-300">
-                <li>.NET Framework 4.8.1 MVC + Web API project structure</li>
-                <li>Vite integration via <code>@Html.Raw("@Html.Vite(...)")</code></li>
-                <li>Tailwind CSS pipeline and utility-first styling</li>
+                <li><strong>Modular frontend entry:</strong> <code>Scripts/app.js</code> now orchestrates layout modules in <code>Scripts/layout/</code>.</li>
+                <li><strong>Icons:</strong> Lucide-based icon swap using Tailwind classes for theme/menu buttons.</li>
+                <li><strong>Security:</strong> Global nonce-based <code>Content-Security-Policy</code> filter with <code>Helpers/NonceHelper.cs</code>.</li>
+                <li><strong>Assets:</strong> <code>wwwroot/dist</code> output via Vite manifest in production.</li>
+                <li><strong>Vite integration:</strong> <code>@Html.Vite("Styles/app.css", "Scripts/app.js")</code></li>
                 <li>Build output folder: <code>wwwroot/dist</code></li>
             </ul>
         </article>
@@ -33,9 +36,11 @@
         </article>
 
         <article class="rounded-xl border border-slate-200 bg-white p-5 shadow-sm dark:border-slate-700 dark:bg-slate-900">
-            <h2 class="mb-2 text-xl font-semibold text-slate-900 dark:text-slate-100">Great template candidates</h2>
+            <h2 class="mb-2 text-xl font-semibold text-slate-900 dark:text-slate-100">Recommended next edits</h2>
             <p class="text-sm text-slate-700 dark:text-slate-300">
-                This starter is ideal when you want ASP.NET stability and modern frontend performance together, especially for existing teams moving legacy MVC apps toward current tooling.
+                Update navigation and page features from the new modules:
+                <span class="font-medium">Scripts/layout/theme.js</span> for theme state logic and
+                <span class="font-medium">Scripts/layout/menu.js</span> for mobile menu behavior.
             </p>
         </article>
     </section>
@@ -43,7 +48,9 @@
     <section class="rounded-xl border border-blue-200 bg-blue-50 p-4 dark:border-blue-900 dark:bg-blue-950">
         <p class="text-sm text-blue-900 dark:text-blue-200">
             To customize this landing page, edit <code>Views/Home/Index.cshtml</code>.
-            To customize styles, update <code>Styles/app.css</code> and keep your scripts in <code>Scripts/app.js</code>.
+            To customize styles, update <code>Styles/app.css</code>.
+            For UI behavior, update <code>Scripts/app.js</code> or its modules in <code>Scripts/layout/</code>.
+            For CSP helpers, review <code>Filters/ContentSecurityPolicyFilter.cs</code> and <code>Helpers/NonceHelper.cs</code>.
         </p>
     </section>
 </main>

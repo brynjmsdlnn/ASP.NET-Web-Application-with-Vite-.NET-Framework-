@@ -80,23 +80,31 @@ npm run dev
 
 ### 5) Enable CSP security headers (already included)
 
-This project includes a global action filter that sets a nonce-based `Content-Security-Policy` header:
+This project uses a global action filter to emit a nonce-based `Content-Security-Policy` header.
 
 - `Filters/ContentSecurityPolicyFilter.cs`
   - Generates a random nonce in `OnActionExecuting`
   - Stores it in `HttpContext.Items[NonceKey]`
   - Uses the nonce in `OnResultExecuting` to emit `script-src` and `style-src`
+  - Adds Vite exception sources when dev mode is enabled
+  - Reads Vite dev-mode settings from config and writes to:
+    - `CSP_EXTRA_SCRIPT_SRC`
+    - `CSP_EXTRA_STYLE_SRC`
+    - `CSP_EXTRA_CONNECT_SRC`
 - Registered globally in `App_Start/FilterConfig.cs`
 - Applied via `Global.asax.cs` through `FilterConfig.RegisterGlobalFilters(GlobalFilters.Filters)`
 - `Helpers/NonceHelper.cs` exposes `@Html.CspNonce()` for Razor views
 
-`Views/Shared/_Layout.cshtml` now applies the nonce to the inline theme script.
+`Views/Shared/_Layout.cshtml` applies the nonce to the inline theme script.
+`Helpers/ViteHelper.cs` focuses on rendering `<script>` and `<link>` tags.
 
-You can verify this by checking your browser response headers for:
+## Configuration
 
-```text
-Content-Security-Policy: default-src 'self'; script-src 'self' 'nonce-...'; style-src 'self' 'nonce-...'; ...
-```
+CSP + Vite dev-server behavior is controlled through `Web.config` app settings:
+
+- `UseViteDevServer` (`true`/`false`)
+- `ViteDevServerOrigin` (for example: `http://localhost:5173`)
+- `ViteDistPath` (for production build output, defaulting to `wwwroot/dist`)
 
 ## Useful Scripts
 
