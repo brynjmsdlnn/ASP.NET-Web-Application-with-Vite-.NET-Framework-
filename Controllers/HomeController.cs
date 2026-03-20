@@ -4,7 +4,7 @@ using System.Linq;
 using System.Web;
 using System.Web.Mvc;
 
-namespace ASP.NET_Web_Application_with_Vite__.NET_Framework_.Controllers
+namespace $safeprojectname$.Controllers
 {
     public class HomeController : Controller
     {

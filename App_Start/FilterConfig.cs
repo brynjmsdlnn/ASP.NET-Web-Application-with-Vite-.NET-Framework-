@@ -1,7 +1,7 @@
-using System.Web.Mvc;
-using ASP.NET_Web_Application_with_Vite__.NET_Framework_.Filters;
+﻿using System.Web.Mvc;
+using $safeprojectname$.Filters;
 
-namespace ASP.NET_Web_Application_with_Vite__.NET_Framework_
+namespace $safeprojectname$
 {
     /// <summary>
     /// Registers global MVC filters for the application.
@@ -19,3 +19,4 @@ namespace ASP.NET_Web_Application_with_Vite__.NET_Framework_
         }
     }
 }
+

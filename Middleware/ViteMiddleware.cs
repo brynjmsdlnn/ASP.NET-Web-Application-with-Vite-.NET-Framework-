@@ -3,7 +3,7 @@ using System.Configuration;
 using System.Net;
 using System.Web;
 
-namespace ASP.NET_Web_Application_with_Vite__.NET_Framework_.Middleware
+namespace $safeprojectname$.Middleware
 {
     /// <summary>
     /// Detects whether the local Vite dev server is reachable and stores the result
@@ -11,21 +11,25 @@ namespace ASP.NET_Web_Application_with_Vite__.NET_Framework_.Middleware
     /// </summary>
     public class ViteMiddleware : IHttpModule
     {
-        // ─── Constants ────────────────────────────────────────────────────────────
+        #region Constants
 
         private const string ContextItemKey = "UseViteDevServer";
         private const string ViteServerProbePath = "/@vite/client";
         private const string DefaultViteOrigin = "http://localhost:5173";
         private const int ProbeTimeoutMilliseconds = 250;
 
-        // ─── Probe cache (process-wide) ───────────────────────────────────────────
+        #endregion
+
+        #region Probe cache (process-wide)
 
         private static readonly object CacheLock = new object();
         private static readonly TimeSpan CacheWindow = TimeSpan.FromSeconds(2);
         private static DateTime _lastProbeUtc = DateTime.MinValue;
         private static bool _lastProbeResult;
 
-        // ─── IHttpModule ──────────────────────────────────────────────────────────
+        #endregion
+
+        #region IHttpModule
 
         /// <inheritdoc />
         public void Init(HttpApplication context)
@@ -36,7 +40,9 @@ namespace ASP.NET_Web_Application_with_Vite__.NET_Framework_.Middleware
         /// <inheritdoc />
         public void Dispose() { }
 
-        // ─── Request handler ──────────────────────────────────────────────────────
+        #endregion
+
+        #region Request handler
 
         private static void OnBeginRequest(object sender, EventArgs e)
         {
@@ -46,7 +52,9 @@ namespace ASP.NET_Web_Application_with_Vite__.NET_Framework_.Middleware
             app.Context.Items[ContextItemKey] = ResolveDevServerEnabled(app.Context);
         }
 
-        // ─── Public API ───────────────────────────────────────────────────────────
+        #endregion
+
+        #region Public API
 
         /// <summary>
         /// Returns <c>true</c> when the Vite dev server flag is enabled in
@@ -76,7 +84,9 @@ namespace ASP.NET_Web_Application_with_Vite__.NET_Framework_.Middleware
             return string.IsNullOrWhiteSpace(origin) ? DefaultViteOrigin : origin.TrimEnd('/');
         }
 
-        // ─── Private helpers ──────────────────────────────────────────────────────
+        #endregion
+
+        #region Private helpers
 
         private static bool ResolveDevServerEnabled(HttpContext context)
         {
@@ -136,5 +146,6 @@ namespace ASP.NET_Web_Application_with_Vite__.NET_Framework_.Middleware
                 return false;
             }
         }
+    #endregion
     }
 }

@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Web.Http;
 
-namespace ASP.NET_Web_Application_with_Vite__.NET_Framework_
+namespace $safeprojectname$
 {
     public static class WebApiConfig
     {
@@ -22,3 +22,4 @@ namespace ASP.NET_Web_Application_with_Vite__.NET_Framework_
         }
     }
 }
+

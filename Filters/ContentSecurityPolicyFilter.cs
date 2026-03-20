@@ -3,10 +3,9 @@ using System.Collections.Generic;
 using System.Configuration;
 using System.Security.Cryptography;
 using System.Web;
-using System.Web;
 using System.Web.Mvc;
 
-namespace ASP.NET_Web_Application_with_Vite__.NET_Framework_.Filters
+namespace $safeprojectname$.Filters
 {
     /// <summary>
     /// Adds a per-request nonce-based Content-Security-Policy header to MVC responses.
@@ -18,7 +17,7 @@ namespace ASP.NET_Web_Application_with_Vite__.NET_Framework_.Filters
         public const string ExtraStyleSourceKey = "CSP_EXTRA_STYLE_SRC";
         public const string ExtraConnectSourceKey = "CSP_EXTRA_CONNECT_SRC";
 
-        // ─── Generate nonce early so views can read it ────────────────────────────
+        #region Generate nonce early so views can read it
 
         public override void OnActionExecuting(ActionExecutingContext filterContext)
         {
@@ -28,7 +27,9 @@ namespace ASP.NET_Web_Application_with_Vite__.NET_Framework_.Filters
             base.OnActionExecuting(filterContext);
         }
 
-        // ─── Build and set CSP header before response flushes ────────────────────
+        #endregion
+
+        #region Build and set CSP header before response flushes
 
         public override void OnResultExecuting(ResultExecutingContext filterContext)
         {
@@ -57,7 +58,9 @@ namespace ASP.NET_Web_Application_with_Vite__.NET_Framework_.Filters
             base.OnResultExecuting(filterContext);
         }
 
-        // ─── Vite CSP registration ───────────────────────────────────────────────
+        #endregion
+
+        #region Vite CSP registration
 
         private static void RegisterViteCspSources(HttpContextBase ctx)
         {
@@ -94,7 +97,9 @@ namespace ASP.NET_Web_Application_with_Vite__.NET_Framework_.Filters
             return string.Empty;
         }
 
-        // ─── Directive builders ───────────────────────────────────────────────────
+        #endregion
+
+        #region Directive builders
 
         private static string BuildDirective(string directive, string nonce, string extraSources)
         {
@@ -131,7 +136,9 @@ namespace ASP.NET_Web_Application_with_Vite__.NET_Framework_.Filters
             }
         }
 
-        // ─── Nonce generation ─────────────────────────────────────────────────────
+        #endregion
+
+        #region Nonce generation
 
         private static string GenerateNonce()
         {
@@ -143,5 +150,7 @@ namespace ASP.NET_Web_Application_with_Vite__.NET_Framework_.Filters
 
             return Convert.ToBase64String(bytes);
         }
+
+        #endregion
     }
 }

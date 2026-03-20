@@ -1,5 +1,5 @@
-using ASP.NET_Web_Application_with_Vite__.NET_Framework_.Middleware;
-using ASP.NET_Web_Application_with_Vite__.NET_Framework_.Filters;
+﻿using $safeprojectname$.Middleware;
+using $safeprojectname$.Filters;
 using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
@@ -10,7 +10,7 @@ using System.Text;
 using System.Web;
 using System.Web.Mvc;
 
-namespace ASP.NET_Web_Application_with_Vite__.NET_Framework_.Helpers
+namespace $safeprojectname$.Helpers
 {
     /// <summary>
     /// Razor HTML helper that emits Vite asset tags from either the dev server or
@@ -18,16 +18,20 @@ namespace ASP.NET_Web_Application_with_Vite__.NET_Framework_.Helpers
     /// </summary>
     public static class ViteHelper
     {
-        // ─── Constants ────────────────────────────────────────────────────────────
+        #region Constants
 
         private static readonly string[] CssExtensions = { ".css", ".scss", ".sass", ".less", ".styl" };
 
-        // ─── Manifest cache (process-wide) ────────────────────────────────────────
+        #endregion
+
+        #region Manifest cache (process-wide)
 
         private static readonly object ManifestLock = new object();
         private static Dictionary<string, ManifestEntry> _manifest;
 
-        // ─── Public API ───────────────────────────────────────────────────────────
+        #endregion
+
+        #region Public API
 
         /// <summary>
         /// Emits script and link tags for the supplied entry paths.
@@ -50,7 +54,9 @@ namespace ASP.NET_Web_Application_with_Vite__.NET_Framework_.Helpers
             return RenderProdTags(entries);
         }
 
-        // ─── Dev rendering ────────────────────────────────────────────────────────
+        #endregion
+
+        #region Dev rendering
 
         private static IHtmlString RenderDevTags(string[] entries)
         {
@@ -74,7 +80,9 @@ namespace ASP.NET_Web_Application_with_Vite__.NET_Framework_.Helpers
             return new HtmlString(sb.ToString());
         }
 
-        // ─── Production rendering ─────────────────────────────────────────────────
+        #endregion
+
+        #region Production rendering
 
         private static IHtmlString RenderProdTags(string[] entries)
         {
@@ -113,7 +121,9 @@ namespace ASP.NET_Web_Application_with_Vite__.NET_Framework_.Helpers
             return new HtmlString(sb.ToString());
         }
 
-        // ─── Manifest ─────────────────────────────────────────────────────────────
+        #endregion
+
+        #region Manifest
 
         private static Dictionary<string, ManifestEntry> GetManifest()
         {
@@ -189,7 +199,9 @@ namespace ASP.NET_Web_Application_with_Vite__.NET_Framework_.Helpers
             return false;
         }
 
-        // ─── Tag builders ─────────────────────────────────────────────────────────
+        #endregion
+
+        #region Tag builders
 
         private static string ScriptTag(string src)
         {
@@ -205,7 +217,9 @@ namespace ASP.NET_Web_Application_with_Vite__.NET_Framework_.Helpers
             return $"<link rel=\"stylesheet\" href=\"{href}\"{nonceAttr} />";
         }
 
-        // ─── URL helpers ──────────────────────────────────────────────────────────
+        #endregion
+
+        #region URL helpers
 
         private static string AssetUrl(string relativeAsset)
         {
@@ -233,7 +247,9 @@ namespace ASP.NET_Web_Application_with_Vite__.NET_Framework_.Helpers
         private static string ManifestVirtualPath() =>
             "~/" + DistPath().Replace("\\", "/").Trim('/') + "/.vite/manifest.json";
 
-        // ─── Utility ──────────────────────────────────────────────────────────────
+        #endregion
+
+        #region Utility
 
         private static string GetNonce() =>
             HttpContext.Current?.Items[ContentSecurityPolicyFilter.NonceKey] as string ?? string.Empty;
@@ -253,7 +269,9 @@ namespace ASP.NET_Web_Application_with_Vite__.NET_Framework_.Helpers
                 : normalized;
         }
 
-        // ─── Manifest model ───────────────────────────────────────────────────────
+        #endregion
+
+        #region Manifest model
 
         private class ManifestEntry
         {
@@ -263,5 +281,7 @@ namespace ASP.NET_Web_Application_with_Vite__.NET_Framework_.Helpers
             [JsonProperty("css")] public List<string> Css { get; set; }
             [JsonProperty("imports")] public List<string> Imports { get; set; }
         }
+
+        #endregion
     }
 }
