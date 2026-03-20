@@ -1,18 +1,16 @@
-﻿@import 'bootstrap/dist/css/bootstrap.css';
+@import 'tailwindcss';
 
-/* Your custom styles below */
-.body-content {
-    margin-top: 15px;
-    padding-left: 15px;
-    padding-right: 15px;
+@custom-variant dark (&:where(.dark, .dark *));
+
+:root {
+    color-scheme: light;
 }
 
-.dl-horizontal dt {
-    white-space: normal;
+html.dark {
+    color-scheme: dark;
 }
 
-input,
-select,
-textarea {
-    max-width: 280px;
+.theme-fade {
+    transition: background-color 150ms ease, color 150ms ease, border-color 150ms ease;
 }
+/* Template-specific custom styles can be added below. */

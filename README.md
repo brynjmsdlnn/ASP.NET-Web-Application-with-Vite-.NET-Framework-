@@ -1,7 +1,7 @@
 # ASP.NET Web Application with Vite (.NET Framework)
 
-ASP.NET MVC/Web API project built on **.NET Framework 4.8.1** with **Vite** for frontend bundling.
-This template keeps the classic ASP.NET project structure while using modern frontend tooling for JS/CSS builds.
+ASP.NET MVC/Web API project built on **.NET Framework 4.8.1** with **Vite** and **Tailwind CSS 4.2** for frontend bundling.
+This template keeps the classic ASP.NET project structure while using modern utility-first frontend tooling for JS/CSS builds.
 
 ## Tech Stack
 
@@ -9,17 +9,19 @@ This template keeps the classic ASP.NET project structure while using modern fro
 - ASP.NET MVC 5 + ASP.NET Web API 5
 - Vite (frontend bundler)
 - NuGet (`packages.config`) + Node package manager (NPM)
-- JavaScript: Bootstrap 5.2.3
+- CSS: Tailwind CSS 4.2
+- Icons: Lucide
 
 ## Repository Structure
 
 - `ASP.NET Web Application with Vite (.NET Framework).csproj` - Main project file
 - `Controllers/` - MVC controllers
 - `App_Start/` - Route, Web API, and MVC configuration
+- `Filters/` - ASP.NET filters (CSP headers)
 - `Helpers/` - Helper classes
 - `Middleware/` - Vite helper middleware
 - `Scripts/app.js` - JavaScript entry source
-- `Styles/app.css` - CSS entry source
+- `Styles/app.css` - Tailwind + custom CSS entry source
 - `Views/` - Razor views
 - `Web.config` - ASP.NET application configuration
 - `vite.config.mjs` - Vite build/dev configuration
@@ -76,6 +78,34 @@ You can run Vite dev server separately when needed:
 npm run dev
 ```
 
+### 5) Enable CSP security headers (already included)
+
+This project uses a global action filter to emit a nonce-based `Content-Security-Policy` header.
+
+- `Filters/ContentSecurityPolicyFilter.cs`
+  - Generates a random nonce in `OnActionExecuting`
+  - Stores it in `HttpContext.Items[NonceKey]`
+  - Uses the nonce in `OnResultExecuting` to emit `script-src` and `style-src`
+  - Adds Vite exception sources when dev mode is enabled
+  - Reads Vite dev-mode settings from config and writes to:
+    - `CSP_EXTRA_SCRIPT_SRC`
+    - `CSP_EXTRA_STYLE_SRC`
+    - `CSP_EXTRA_CONNECT_SRC`
+- Registered globally in `App_Start/FilterConfig.cs`
+- Applied via `Global.asax.cs` through `FilterConfig.RegisterGlobalFilters(GlobalFilters.Filters)`
+- `Helpers/NonceHelper.cs` exposes `@Html.CspNonce()` for Razor views
+
+`Views/Shared/_Layout.cshtml` applies the nonce to the inline theme script.
+`Helpers/ViteHelper.cs` focuses on rendering `<script>` and `<link>` tags.
+
+## Configuration
+
+CSP + Vite dev-server behavior is controlled through `Web.config` app settings:
+
+- `UseViteDevServer` (`true`/`false`)
+- `ViteDevServerOrigin` (for example: `http://localhost:5173`)
+- `ViteDistPath` (for production build output, defaulting to `wwwroot/dist`)
+
 ## Useful Scripts
 
 - `npm run dev` - start Vite dev server on `localhost:5173`
@@ -87,8 +117,8 @@ npm run dev
 - `node_modules`, `bin`, `obj`, `.vs`, and `wwwroot/dist` are ignored in `.gitignore`
   to keep tracked files source-focused.
 - This project uses `packages.config` and classic ASP.NET project style.
+- Theme and mobile menu icons are rendered through `lucide` with Tailwind class swaps (`dark:block`, `hidden`).
 
 ## License
 
 This project is provided as-is for learning/template purposes.
-

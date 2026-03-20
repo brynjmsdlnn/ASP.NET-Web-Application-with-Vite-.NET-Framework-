@@ -1,4 +1,6 @@
-﻿using ASP.NET_Web_Application_with_Vite__.NET_Framework_.Middleware;
+using ASP.NET_Web_Application_with_Vite__.NET_Framework_.Middleware;
+using ASP.NET_Web_Application_with_Vite__.NET_Framework_.Filters;
+using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
 using System.Configuration;
@@ -7,7 +9,6 @@ using System.Linq;
 using System.Text;
 using System.Web;
 using System.Web.Mvc;
-using Newtonsoft.Json;
 
 namespace ASP.NET_Web_Application_with_Vite__.NET_Framework_.Helpers
 {
@@ -29,45 +30,45 @@ namespace ASP.NET_Web_Application_with_Vite__.NET_Framework_.Helpers
         // ─── Public API ───────────────────────────────────────────────────────────
 
         /// <summary>
-        /// Emits <c>&lt;script&gt;</c> and <c>&lt;link&gt;</c> tags for the supplied entry paths.
+        /// Emits script and link tags for the supplied entry paths.
         /// In development, tags point to the Vite dev server.
         /// In production, tags are resolved from <c>manifest.json</c>.
         /// </summary>
         /// <example>
-        /// <code>@Html.Vite("Styles/app.css", "Scripts/main.js")</code>
+        /// <code>@Html.Vite("Styles/app.css", "Scripts/app.js")</code>
         /// </example>
         public static IHtmlString Vite(this HtmlHelper html, params string[] entries)
         {
             if (entries == null || entries.Length == 0)
-            {
                 return new HtmlString(string.Empty);
+
+            if (ViteMiddleware.IsEnabled(HttpContext.Current))
+            {
+                return RenderDevTags(entries);
             }
 
-            return ViteMiddleware.IsEnabled(HttpContext.Current)
-                ? RenderDevTags(entries)
-                : RenderProdTags(entries);
+            return RenderProdTags(entries);
         }
 
         // ─── Dev rendering ────────────────────────────────────────────────────────
 
         private static IHtmlString RenderDevTags(string[] entries)
         {
-            string origin = ViteMiddleware.GetViteOrigin();
-            StringBuilder sb = new StringBuilder();
+            var origin = ViteMiddleware.GetViteOrigin();
+            var sb = new StringBuilder();
 
             // Vite HMR client must always be first
-            sb.AppendLine(ScriptTag(origin + "/@vite/client"));
+            sb.AppendLine(ScriptTag($"{origin}/@vite/client"));
 
-            foreach (string entry in entries)
+            foreach (var entry in entries)
             {
                 if (string.IsNullOrWhiteSpace(entry)) continue;
 
-                string path = "/" + NormalizePath(entry);
+                var path = "/" + NormalizePath(entry);
 
-                if (IsCssEntry(entry))
-                    sb.AppendLine(LinkTag(origin + path));   // <link> prevents FOUC
-                else
-                    sb.AppendLine(ScriptTag(origin + path));
+                sb.AppendLine(IsCssEntry(entry)
+                    ? LinkTag(origin + path)    // <link> prevents FOUC
+                    : ScriptTag(origin + path));
             }
 
             return new HtmlString(sb.ToString());
@@ -77,22 +78,19 @@ namespace ASP.NET_Web_Application_with_Vite__.NET_Framework_.Helpers
 
         private static IHtmlString RenderProdTags(string[] entries)
         {
-            Dictionary<string, ManifestEntry> manifest = GetManifest();
-            StringBuilder sb = new StringBuilder();
-            HashSet<string> emitted = new HashSet<string>(StringComparer.OrdinalIgnoreCase);
+            var manifest = GetManifest();
+            var sb = new StringBuilder();
+            var emitted = new HashSet<string>(StringComparer.OrdinalIgnoreCase);
 
-            foreach (string entry in entries)
+            foreach (var entry in entries)
             {
                 if (string.IsNullOrWhiteSpace(entry)) continue;
+                if (!TryGetManifestEntry(manifest, entry, out var asset)) continue;
 
-                ManifestEntry asset;
-                if (!TryGetManifestEntry(manifest, entry, out asset))
-                    continue;
-
-                // Emit any associated CSS chunks first
+                // Emit associated CSS chunks first
                 if (asset.Css != null)
                 {
-                    foreach (string css in asset.Css)
+                    foreach (var css in asset.Css)
                     {
                         if (!string.IsNullOrWhiteSpace(css) && emitted.Add(NormalizePath(css)))
                             sb.AppendLine(LinkTag(AssetUrl(css)));
@@ -129,16 +127,15 @@ namespace ASP.NET_Web_Application_with_Vite__.NET_Framework_.Helpers
                     throw new InvalidOperationException(
                         "Cannot resolve the Vite manifest without an active HTTP context.");
 
-                string manifestPath = HttpContext.Current.Server.MapPath(ManifestVirtualPath());
+                var manifestPath = HttpContext.Current.Server.MapPath(ManifestVirtualPath());
 
                 if (!File.Exists(manifestPath))
                     throw new FileNotFoundException(
                         "Vite manifest not found. Run 'npm run build' to generate it.", manifestPath);
 
-                string json = File.ReadAllText(manifestPath);
-                Dictionary<string, ManifestEntry> raw =
-                    JsonConvert.DeserializeObject<Dictionary<string, ManifestEntry>>(json)
-                    ?? new Dictionary<string, ManifestEntry>();
+                var raw = JsonConvert.DeserializeObject<Dictionary<string, ManifestEntry>>(
+                              File.ReadAllText(manifestPath))
+                          ?? new Dictionary<string, ManifestEntry>();
 
                 _manifest = new Dictionary<string, ManifestEntry>(raw, StringComparer.OrdinalIgnoreCase);
             }
@@ -146,45 +143,45 @@ namespace ASP.NET_Web_Application_with_Vite__.NET_Framework_.Helpers
             return _manifest;
         }
 
-        /// <summary>
-        /// Resolves a manifest entry using tolerant path matching:
-        /// exact key → stripped prefix → leading-slash variants → filename fallback → src fallback.
-        /// </summary>
         private static bool TryGetManifestEntry(
             Dictionary<string, ManifestEntry> manifest,
             string entry,
             out ManifestEntry asset)
         {
-            string normalized = NormalizePath(entry);
-            string fileName = Path.GetFileName(normalized);
+            var normalized = NormalizePath(entry);
+            var fileName = Path.GetFileName(normalized);
 
-            // 1. Exact match (with and without leading slash)
+            // 1. Exact match
             if (manifest.TryGetValue(normalized, out asset) ||
                 manifest.TryGetValue("/" + normalized, out asset))
                 return true;
 
             // 2. Fuzzy scan — filename or src match
-            foreach (KeyValuePair<string, ManifestEntry> kvp in manifest)
+            foreach (var kvp in manifest)
             {
-                string key = NormalizePath(kvp.Key);
-                string keyFileName = Path.GetFileName(key);
+                var key = NormalizePath(kvp.Key);
+                var keyFileName = Path.GetFileName(key);
 
-                bool keyMatch = string.Equals(key, normalized, StringComparison.OrdinalIgnoreCase)
-                             || (!string.IsNullOrEmpty(fileName) &&
-                                 string.Equals(keyFileName, fileName, StringComparison.OrdinalIgnoreCase));
-
-                if (keyMatch) { asset = kvp.Value; return true; }
+                if (string.Equals(key, normalized, StringComparison.OrdinalIgnoreCase) ||
+                    (!string.IsNullOrEmpty(fileName) &&
+                     string.Equals(keyFileName, fileName, StringComparison.OrdinalIgnoreCase)))
+                {
+                    asset = kvp.Value;
+                    return true;
+                }
 
                 if (kvp.Value?.Src != null)
                 {
-                    string src = NormalizePath(kvp.Value.Src);
-                    string srcFileName = Path.GetFileName(src);
+                    var src = NormalizePath(kvp.Value.Src);
+                    var srcFileName = Path.GetFileName(src);
 
-                    bool srcMatch = string.Equals(src, normalized, StringComparison.OrdinalIgnoreCase)
-                                 || (!string.IsNullOrEmpty(fileName) &&
-                                     string.Equals(srcFileName, fileName, StringComparison.OrdinalIgnoreCase));
-
-                    if (srcMatch) { asset = kvp.Value; return true; }
+                    if (string.Equals(src, normalized, StringComparison.OrdinalIgnoreCase) ||
+                        (!string.IsNullOrEmpty(fileName) &&
+                         string.Equals(srcFileName, fileName, StringComparison.OrdinalIgnoreCase)))
+                    {
+                        asset = kvp.Value;
+                        return true;
+                    }
                 }
             }
 
@@ -192,13 +189,29 @@ namespace ASP.NET_Web_Application_with_Vite__.NET_Framework_.Helpers
             return false;
         }
 
+        // ─── Tag builders ─────────────────────────────────────────────────────────
+
+        private static string ScriptTag(string src)
+        {
+            var nonce = GetNonce();
+            var nonceAttr = string.IsNullOrEmpty(nonce) ? "" : $" nonce=\"{nonce}\"";
+            return $"<script type=\"module\" src=\"{src}\"{nonceAttr}></script>";
+        }
+
+        private static string LinkTag(string href)
+        {
+            var nonce = GetNonce();
+            var nonceAttr = string.IsNullOrEmpty(nonce) ? "" : $" nonce=\"{nonce}\"";
+            return $"<link rel=\"stylesheet\" href=\"{href}\"{nonceAttr} />";
+        }
+
         // ─── URL helpers ──────────────────────────────────────────────────────────
 
         private static string AssetUrl(string relativeAsset)
         {
-            string distPath = DistPath().Trim('/');
-            string assetPath = NormalizePath(relativeAsset).TrimStart('/');
-            string appBase = AppBasePath();
+            var distPath = DistPath().Trim('/');
+            var assetPath = NormalizePath(relativeAsset).TrimStart('/');
+            var appBase = AppBasePath();
 
             return string.IsNullOrEmpty(appBase)
                 ? $"/{distPath}/{assetPath}"
@@ -207,49 +220,37 @@ namespace ASP.NET_Web_Application_with_Vite__.NET_Framework_.Helpers
 
         private static string AppBasePath()
         {
-            string appPath = HttpContext.Current?.Request?.ApplicationPath;
-            if (string.IsNullOrEmpty(appPath) || appPath == "/") return string.Empty;
-            return appPath.TrimEnd('/');
+            var appPath = HttpContext.Current?.Request?.ApplicationPath;
+            return string.IsNullOrEmpty(appPath) || appPath == "/" ? string.Empty : appPath.TrimEnd('/');
         }
 
         private static string DistPath()
         {
-            string path = ConfigurationManager.AppSettings["ViteDistPath"];
+            var path = ConfigurationManager.AppSettings["ViteDistPath"];
             return string.IsNullOrWhiteSpace(path) ? "wwwroot/dist" : path.Trim().Trim('~', '/');
         }
 
-        private static string ManifestVirtualPath()
-        {
-            return "~/" + DistPath().Replace("\\", "/").Trim('/') + "/.vite/manifest.json";
-        }
-
-        // ─── Tag builders ─────────────────────────────────────────────────────────
-
-        private static string LinkTag(string href)
-            => $"<link rel=\"stylesheet\" href=\"{href}\" />";
-
-        private static string ScriptTag(string src)
-            => $"<script type=\"module\" src=\"{src}\"></script>";
+        private static string ManifestVirtualPath() =>
+            "~/" + DistPath().Replace("\\", "/").Trim('/') + "/.vite/manifest.json";
 
         // ─── Utility ──────────────────────────────────────────────────────────────
 
-        private static bool IsCssEntry(string path)
-        {
-            if (string.IsNullOrWhiteSpace(path)) return false;
-            return CssExtensions.Any(ext => path.EndsWith(ext, StringComparison.OrdinalIgnoreCase));
-        }
+        private static string GetNonce() =>
+            HttpContext.Current?.Items[ContentSecurityPolicyFilter.NonceKey] as string ?? string.Empty;
+
+        private static bool IsCssEntry(string path) =>
+            !string.IsNullOrWhiteSpace(path) &&
+            CssExtensions.Any(ext => path.EndsWith(ext, StringComparison.OrdinalIgnoreCase));
 
         private static string NormalizePath(string path)
         {
             if (string.IsNullOrWhiteSpace(path)) return string.Empty;
 
-            string normalized = path.Replace("\\", "/").Trim();
-            normalized = normalized.TrimStart('~', '/');
+            var normalized = path.Replace("\\", "/").Trim().TrimStart('~', '/');
 
-            if (normalized.StartsWith("./", StringComparison.Ordinal))
-                normalized = normalized.Substring(2);
-
-            return normalized;
+            return normalized.StartsWith("./", StringComparison.Ordinal)
+                ? normalized.Substring(2)
+                : normalized;
         }
 
         // ─── Manifest model ───────────────────────────────────────────────────────
