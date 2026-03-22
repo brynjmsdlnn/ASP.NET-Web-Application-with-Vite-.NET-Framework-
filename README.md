@@ -119,6 +119,21 @@ CSP + Vite dev-server behavior is controlled through `Web.config` app settings:
 - This project uses `packages.config` and classic ASP.NET project style.
 - Theme and mobile menu icons are rendered through `lucide` with Tailwind class swaps (`dark:block`, `hidden`).
 
+## Template Dependency Notes
+
+- This template keeps `$safeprojectname$` as the tokenized namespace/assembly value for template instantiation.
+- Frontend legacy browser bundles were removed:
+  - `bootstrap`
+  - `jQuery`
+  - `jQuery.Validation`
+  - `Microsoft.jQuery.Unobtrusive.Validation`
+  - `Modernizr`
+- Previously removed during cleanup:
+  - `Microsoft.AspNet.Web.Optimization`
+  - `WebGrease`
+  - `Antlr` / `Antlr3.Runtime`
+- `Microsoft.Web.Infrastructure` is intentionally kept because MVC/WebPages pre-start initialization requires it.
+
 ## License
 
 This project is provided as-is for learning/template purposes.
