@@ -33,4 +33,20 @@
             </ul>
         </article>
     </section>
+    <article class="rounded-xl border border-amber-200 bg-amber-50 p-5 shadow-sm dark:border-amber-900 dark:bg-amber-950 md:col-span-2">
+        <h3 class="mb-2 text-xl font-semibold text-slate-900 dark:text-slate-100">Template tradeoff: unobtrusive validation</h3>
+        <p class="text-sm text-slate-700 dark:text-slate-300">
+            Traditional ASP.NET MVC client validation is intentionally disabled by default to preserve a Vite-first frontend flow.
+        </p>
+        <p class="text-sm text-slate-700 dark:text-slate-300">
+            You still keep server-side validation (`ModelState`) as the source of truth, while client UX validation is left
+            as an explicit implementation choice.
+        </p>
+        <ul class="list-inside list-disc space-y-1 mt-3 text-sm text-slate-700 dark:text-slate-300">
+            <li>Keep this path if you want modern JS tooling without `jquery.validate` dependencies.</li>
+            <li>Restore legacy behavior by re-adding `jQuery.Validation` and `Microsoft.jQuery.Unobtrusive.Validation` plus client scripts.</li>
+            <li>Or implement focused validation UX in `Scripts/layout` and form components for better control and fewer transitive packages.</li>
+            <li>Server validation still runs on every post and remains the required correctness gate.</li>
+        </ul>
+    </article>
 </main>

@@ -134,6 +134,21 @@ CSP + Vite dev-server behavior is controlled through `Web.config` app settings:
   - `Antlr` / `Antlr3.Runtime`
 - `Microsoft.Web.Infrastructure` is intentionally kept because MVC/WebPages pre-start initialization requires it.
 
+## Validation tradeoff (template decision)
+
+- This template favors a Vite-first front-end flow and keeps the jQuery unobtrusive validation stack out by default.
+- Practical effect:
+  - Data annotations still enforce validation on the server (`ModelState` on postback).
+  - Client-side annotation-based validation is not enabled automatically from `Html.*For(...)` helpers.
+  - Forms with a legacy MVC UX expectation (`data-val-*` auto-wired by `jquery.validate`) need a replacement path.
+- If you want the traditional MVC unobtrusive behavior:
+  - Re-add `jQuery`, `jQuery.Validation`, and `Microsoft.jQuery.Unobtrusive.Validation`.
+  - Keep/restore `ClientValidationEnabled` and `UnobtrusiveJavaScriptEnabled` in config.
+  - Include the required JS scripts in your layout (`jquery`, `jquery.validate`, `jquery.validate.unobtrusive`).
+- Modern alternative for this template:
+  - Keep server-side validation as the source of truth and add targeted client validation via your preferred Vite-managed JS.
+  - Use existing model constraints to generate server validation messages while validating critical UX paths in custom JS modules.
+
 ## License
 
 This project is provided as-is for learning/template purposes.
