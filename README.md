@@ -6,7 +6,7 @@ This template keeps the classic ASP.NET project structure while using modern uti
 ## Tech Stack
 
 - .NET Framework 4.8.1
-- ASP.NET MVC 5 + ASP.NET Web API 5
+- ASP.NET MVC 5 + ASP.NET Web API 2
 - Vite (frontend bundler)
 - NuGet (`packages.config`) + Node package manager (NPM)
 - CSS: Tailwind CSS 4.2
